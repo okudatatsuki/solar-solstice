@@ -1,0 +1,47 @@
+---
+import CocktailItem from "../components/CocktailItem.astro";
+
+interface Cocktail {
+  id: number;
+  name: string;
+  price: number;
+  note?: string;
+}
+
+const whiteLady: Cocktail = {
+  id: 55126,
+  name: "ホワイトレディ",
+  price: 1200,
+  note: "美味しいです",
+};
+
+const blueHawaii: Cocktail = {
+  id: 16558,
+  name: "ブルーハワイ",
+  price: 1300,
+};
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Props基礎</title>
+  </head>
+  <body>
+    <h1>変数利用のProps</h1>
+    <CocktailItem
+      id={whiteLady.id}
+      name={whiteLady.name}
+      price={whiteLady.price}
+      note={whiteLady.note}
+    />
+    <CocktailItem
+      id={blueHawaii.id}
+      name={blueHawaii.name}
+      price={blueHawaii.price}
+    />
+  </body>
+</html>

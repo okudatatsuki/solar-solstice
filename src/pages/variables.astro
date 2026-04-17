@@ -1,0 +1,22 @@
+---
+const name = "しんちゃん";
+const now = new Date();
+const timeStr = now.toLocaleTimeString();
+const url = "http://astro.build";
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>変数の利用</title>
+  </head>
+  <body>
+    <h1>Astroでの変数の利用</h1>
+    <p>こんにちは！{name}さん！</p>
+    <p>今の時刻は{timeStr}です。</p>
+    <a href={url} target="_blank">Asrtoの公式サイト</a>
+  </body>
+</html>

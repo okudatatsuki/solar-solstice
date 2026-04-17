@@ -1,0 +1,30 @@
+---
+import OneInfo from "../components/OneInfo.astro";
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Props基礎</title>
+  </head>
+  <body>
+    <h1>Props基礎</h1>
+    <section>
+      <h2>属性に直接記述</h2>
+      <OneInfo
+        title="Propsの利用"
+        content="子コンポーネントにデータを渡すにはPropsを利用する"
+      />
+    </section>
+  </body>
+</html>
+
+<style>
+  section {
+    border: blue 1px solid;
+    margin: 10px;
+  }
+</style>

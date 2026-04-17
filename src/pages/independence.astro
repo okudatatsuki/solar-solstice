@@ -1,0 +1,28 @@
+---
+import RandSection from "../components/RandSection.astro";
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>コンポーネントの独立性</title>
+  </head>
+  <body>
+    <h1>コンポーネントの独立性</h1>
+    <section>
+      <h2>乱数表示のコンポーネント</h2>
+      <RandSection />
+      <RandSection />
+    </section>
+  </body>
+</html>
+
+<style is:global>
+  .secition {
+    border: blue 1px solid;
+    margin: 10px;
+  }
+</style>
