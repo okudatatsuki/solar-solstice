@@ -1,0 +1,25 @@
+---
+import EmbeddedHtmlFailBack from "../components/EmbeddedHtmlFailBack.astro";
+
+const taro = "田中太郎"
+const jiro = "鈴木二郎"
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>フォールバックコンテンツの利用</title>
+  </head>
+  <body>
+    <h1>フォールバックコンテンツの利用</h1>
+    <EmbeddedHtmlFailBack
+    name={taro}>
+    <p>連絡がつきません</p>
+</EmbeddedHtmlFailBack>
+<EmbeddedHtmlFailBack
+name={jiro}/>
+  </body>
+</html>

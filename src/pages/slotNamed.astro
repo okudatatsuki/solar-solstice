@@ -1,0 +1,39 @@
+---
+import EmbeddedHtmlNamed from "../components/EmbeddedHtmlNamed.astro";
+
+const taro = "田中太郎"
+const jiro = "鈴木二郎"
+const taroProblems: string[] = ["電話が通じません。", "留守です"]
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>名前付きスロット</title>
+  </head>
+  <body>
+ <h1>名前付きスロット</h1>
+ <section>
+    <EmbeddedHtmlNamed
+    name={taro}>
+    <p>問題発生</p>
+    <Fragment slot="default">
+        <ul>
+            {
+                taroProblems.map(
+                    (item) => (
+                        <li>{item}</li>
+                    )
+                )
+            }
+        </ul>
+    </Fragment>
+    </EmbeddedHtmlNamed>
+    <EmbeddedHtmlNamed
+    name={jiro}>
+ </section>
+  </body>
+</html>
