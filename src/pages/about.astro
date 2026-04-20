@@ -1,17 +1,13 @@
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>お店情報 | ルーティング</title>
-  </head>
-  <body>
-  <h1>ルーティング</h1>
-  <h2>お店情報</h2>
-  <section>
-    <h3>海辺の見えるカフェ</h3>
-  </section>
-  <a href="/">TOPへ</a>
-  </body>
-</html>
+---
+ import BaseLayout from "../layout/BaseLayout.astro";
+---
+
+<BaseLayout
+subTitle="お店情報 |">
+<h2>お店情報</h2>
+<section>
+  <h3>海辺の見えるカフェ</h3>
+</section>
+<a href="/">TOPへ</a>
+</BaseLayout>
+

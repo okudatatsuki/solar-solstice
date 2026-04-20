@@ -1,42 +1,28 @@
 ---
+import BaseLayout from "../../layout/BaseLayout.astro";
 import NewMenuListItem from "../../components/NewMenuListItem.astro";
-interface Menu {
-    id: number;
-    name: string;
-    price: number
-}
-
-const newMenuList: Menu[] = [
-    {id: 22345, name: "スパイシーチェイ",price: 700},
-    {id: 35679, name: "濃い味コーヒーゼリー",price: 900},
-]
+import {newMenuArray} from "../../dataFactory"
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>新着メニュー一覧 | ルーティング</title>
-  </head>
-  <body>
-    <h1>ルーティング</h1>
-    <h2>新着メニュー一覧</h2>
-    <section>
-        <ul>
-            {
-                newMenuList.map(
-                    (item) => (
-                        <NewMenuListItem
-                        id={item.id}
-                        name={item.name}
-                        price={item.price}/>
-                    )
+<BaseLayout
+subTitle="新着メニュー一覧 |">
+<h2>新着メニュー一覧</h2>
+<section>
+    <ul>
+        {
+            //ビルド時に展開される
+            newMenuArray.map(
+                //item は「最初から入っている」わけではないmap() が毎回、自動で入れてくれる
+                //ここのitemは、map() が毎回値を入れてくれる「受け取り変数」itemという名前で受け取る。つまり引数
+                //もう一つ下のitemはさっき引数のitemで受け取ったものをそのままmenuに入れてるだけ
+                    
+                (item) => (
+                    <NewMenuListItem
+                    menu={item}/>
                 )
-            }
-        </ul>
-    </section>
-    <a href="/">TOPへ</a>
-  </body>
-</html>
+        )
+        }
+    </ul>
+</section>
+<a href="">TOPへ</a>
+</BaseLayout>

@@ -1,79 +1,57 @@
 ---
-// ===== ① URLを決める（ビルド時に1回だけ実行される） =====
+//大前提として、子の[menuId].astroのtsが動く。その後にインポートしたタイプスクリプトが動く。
+import BaseLayout from "../../layout/BaseLayout.astro";
+import {newMenuList} from "../../dataFactory"
 
-// Astroに「どのURLのページを生成するか」を教える関数
-// ブラウザは関係ない。npm run build のタイミングで実行される
+//getStaticPaths()の戻り値配列各要素のオブジェクト型を指定
+//ReturnArrayItem 型はparams というプロパティを持っていて、中にはmenuId（文字列）が入っている
+interface ReturnArrayItem{
+  params: {
+    menuId: string
+  }
+}
+
+//大前提として、Astroはデータからではなく、データからではなく、URLからページを作る。だから、valueのidではなく、keyからとる。
+//静的パスの指定
+//getSaticPathsは、ビルド時に静的HTMLとして生成（SSG）するための関数
 export function getStaticPaths() {
-    return [
-        { params: { menuId: "22345" } }, // → /newMenus/22345 というページを作る
-        { params: { menuId: "35679" } }, // → /newMenus/35679 というページを作る
-    ];
+  //ReturnArrayItemという型を作り、中身が[]なので０である
+  //この関数の戻り値配列をからの配列として用意。各要素をReturnArrayItem型とする
+  const returnArray: ReturnArrayItem[] = [];
+  //newMenuListをループ処理しながら、戻り値配列に各要素を追加
+  newMenuList.forEach(
+    //この3つは引数で、valueは中身なので、{ id: 22345, name: "スパイシーチャイ", price: 700 }　keyは22345、mapはmapオブジェクト自体。
+    (value, key, map) => {
+      //mapオブジェクト自体。これはループ中に中身を参照したい時に使う
+      //pushは1個追加する意味を持つ元々から配列なので、1個ずつ足していくイメージ
+      //最初の interfaceのところでこういう形で返せと指定してるからこの形になってる
+      //parmasはastroの動的ルーティング用に決められてる箱（元々の）
+      //parmasは文字列出ないとダメである。keyは数字なので、それを文字列に変える必要がある。String()とやると文字列にできる
+      returnArray.push({params: {menuId: String(key)}})
+    }
+  );
+  //戻り値配列をリターン
+  return returnArray;
 }
-
-// ===== ② 型定義 =====
-
-// メニュー1件分のデータ構造を定義するインターフェース
-interface Menu {
-    id: number;
-    name: string;
-    price: number;
-}
-
-// ===== ③ データを用意する =====
-
-//「このMapはnumberをキーにしてMenuを返す」と最初に宣言してる
-// Map<number, Menu> は「キーがnumber型、値がMenu型」のMapという意味
-// new Map() で空のMapインスタンスを作成する
-const newMenuList: Map<number, Menu> = new Map();
-
-// .set(キー, 値) でデータを追加する
-// キーは number 型であることに注意（後で型変換が必要になる）
-newMenuList.set(22345, { id: 22345, name: "スパイシーチェイ", price: 700 });
-newMenuList.set(35679, { id: 35679, name: "濃い味コーヒーゼリー", price: 900 });
-
-// ===== ④ URLのIDを受け取る =====
-
-//URLの /22345 から "22345" という文字列を取り出してる。
-// Astro.params に getStaticPaths() で定義した params が入ってくる
-// 例: { menuId: "22345" }
-// {} は分割代入。Astro.params.menuId と書くのと同じ意味
-// 注意: Astro.params は仕様上すべて「文字列」として渡ってくる
-const { menuId } = Astro.params; // menuId は "22345"（string型）
-
-// ===== ⑤ IDでデータを検索する =====
-
-//"22345" を数値の 22345 に変換して、Mapからメニューを検索してる。
-// menuId は文字列 "22345"。でも Map のキーは数値 22345 で登録してある
-// 文字列のまま検索すると「そんなキーない」と言われて undefined が返る
-// だから Number() で数値に変換してから検索する１
-const newMenuItem = newMenuList.get(Number(menuId));
+//下の3つは、URL → データ → タイトル文字列 に変換する流れ
+//ルートパラメーターmenuIdの取得
+const {menuId} = Astro.params;
+//menuIdに該当する新着メニューデータオブジェクトを取得
+// URLは、数字のデータでなければならない。
+const newMenuItem = newMenuList.get(Number(menuId))
+//nameを取得
+const subTitle = `${newMenuItem?.name} |`;
 ---
 
-<!-- ===== ⑥ 安全に表示する ===== -->
-
-<!--
-  newMenuItem は Menu | undefined の可能性がある（④⑤の理由で）
-  .name のように直接アクセスすると、undefined のとき実行時エラーになる
-  ?. はオプショナルチェーン。「値があれば .name を使い、なければ undefined にする」という意味
--->
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{newMenuItem?.name} | ルーティング</title>
-  </head>
-  <body>
-    <h1>ルーティング</h1>
-    <h2>新着メニュー</h2>
-    <section>
-        <h3>{newMenuItem?.name}</h3>
-        <p>
-            新しいメニューである{newMenuItem?.name}はいかがですか？<br>
-            金額は{newMenuItem?.price}です。
-        </p>
-    </section>
-    <a href="/newMenus">新着メニュー一覧へ</a>
-  </body>
-</html>
+<BaseLayout
+subTitle={subTitle}>
+ <h2>新着メニュー<h2/>
+  <section>
+    <h3>{newMenuItem?.name}<h3>
+      <p>
+        新しいメニューである{newMenuItem?.name}はいかがですが？<br>
+        金額は{newMenuItem?.price}です。
+      </p>
+  </section>
+  <a href="/newMenus">新着メニュー一覧へ</a>
+</BaseLayout>

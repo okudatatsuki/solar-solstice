@@ -1,18 +1,13 @@
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>ルーテイング</title>
-  </head>
-  <body>
-    <h1>ルーティング</h1>
-  <p>
-    <a href="/about">お店情報</a>
-  </p>
-  <p>
-    <a href="/newMenus">新着メニュー</a>
-  </p>
-  </body>
-</html>
+---
+import BaseLayout from "../layout/BaseLayout.astro"
+---
+
+<BaseLayout
+subTitle="">
+<p>
+  <a href="/about">お客様情報</a>
+</p>
+<p>
+  <a href="/newMenus">新着メニュー</a>
+</p>
+</BaseLayout>
