@@ -1,0 +1,42 @@
+---
+import NewMenuListItem from "../../components/NewMenuListItem.astro";
+interface Menu {
+    id: number;
+    name: string;
+    price: number
+}
+
+const newMenuList: Menu[] = [
+    {id: 22345, name: "スパイシーチェイ",price: 700},
+    {id: 35679, name: "濃い味コーヒーゼリー",price: 900},
+]
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>新着メニュー一覧 | ルーティング</title>
+  </head>
+  <body>
+    <h1>ルーティング</h1>
+    <h2>新着メニュー一覧</h2>
+    <section>
+        <ul>
+            {
+                newMenuList.map(
+                    (item) => (
+                        <NewMenuListItem
+                        id={item.id}
+                        name={item.name}
+                        price={item.price}/>
+                    )
+                )
+            }
+        </ul>
+    </section>
+    <a href="/">TOPへ</a>
+  </body>
+</html>

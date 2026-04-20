@@ -1,0 +1,79 @@
+---
+// ===== ① URLを決める（ビルド時に1回だけ実行される） =====
+
+// Astroに「どのURLのページを生成するか」を教える関数
+// ブラウザは関係ない。npm run build のタイミングで実行される
+export function getStaticPaths() {
+    return [
+        { params: { menuId: "22345" } }, // → /newMenus/22345 というページを作る
+        { params: { menuId: "35679" } }, // → /newMenus/35679 というページを作る
+    ];
+}
+
+// ===== ② 型定義 =====
+
+// メニュー1件分のデータ構造を定義するインターフェース
+interface Menu {
+    id: number;
+    name: string;
+    price: number;
+}
+
+// ===== ③ データを用意する =====
+
+//「このMapはnumberをキーにしてMenuを返す」と最初に宣言してる
+// Map<number, Menu> は「キーがnumber型、値がMenu型」のMapという意味
+// new Map() で空のMapインスタンスを作成する
+const newMenuList: Map<number, Menu> = new Map();
+
+// .set(キー, 値) でデータを追加する
+// キーは number 型であることに注意（後で型変換が必要になる）
+newMenuList.set(22345, { id: 22345, name: "スパイシーチェイ", price: 700 });
+newMenuList.set(35679, { id: 35679, name: "濃い味コーヒーゼリー", price: 900 });
+
+// ===== ④ URLのIDを受け取る =====
+
+//URLの /22345 から "22345" という文字列を取り出してる。
+// Astro.params に getStaticPaths() で定義した params が入ってくる
+// 例: { menuId: "22345" }
+// {} は分割代入。Astro.params.menuId と書くのと同じ意味
+// 注意: Astro.params は仕様上すべて「文字列」として渡ってくる
+const { menuId } = Astro.params; // menuId は "22345"（string型）
+
+// ===== ⑤ IDでデータを検索する =====
+
+//"22345" を数値の 22345 に変換して、Mapからメニューを検索してる。
+// menuId は文字列 "22345"。でも Map のキーは数値 22345 で登録してある
+// 文字列のまま検索すると「そんなキーない」と言われて undefined が返る
+// だから Number() で数値に変換してから検索する１
+const newMenuItem = newMenuList.get(Number(menuId));
+---
+
+<!-- ===== ⑥ 安全に表示する ===== -->
+
+<!--
+  newMenuItem は Menu | undefined の可能性がある（④⑤の理由で）
+  .name のように直接アクセスすると、undefined のとき実行時エラーになる
+  ?. はオプショナルチェーン。「値があれば .name を使い、なければ undefined にする」という意味
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{newMenuItem?.name} | ルーティング</title>
+  </head>
+  <body>
+    <h1>ルーティング</h1>
+    <h2>新着メニュー</h2>
+    <section>
+        <h3>{newMenuItem?.name}</h3>
+        <p>
+            新しいメニューである{newMenuItem?.name}はいかがですか？<br>
+            金額は{newMenuItem?.price}です。
+        </p>
+    </section>
+    <a href="/newMenus">新着メニュー一覧へ</a>
+  </body>
+</html>
